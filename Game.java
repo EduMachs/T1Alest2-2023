@@ -36,33 +36,6 @@ public class Game {
         System.out.println("File content:\n" + content);
 }
 
-    public static void parseadorArquivo() {
-        String filename = "casos_teste\\caso00.txt"; // Replace with the actual filename
-        int rounds = 0;
-        List<String> lines = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (rounds == 0) {
-                    rounds = Integer.parseInt(line.split(" ")[1]);
-                } else {
-                    lines.add(line);
-                }
-            }
-        } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
-        }
-
-        int[][] monkeys = new int[rounds][10];
-        for (int i = 0; i < lines.size(); i++) {
-            String[] parts = lines.get(i).split(" ");
-            for (int j = 0; j < 10; j++) {
-                monkeys[i][j] = Integer.parseInt(parts[j+7]);
-            }
-        }
-    }
-
     public static boolean casoDeTesteValido(Integer value) {
         var stringValue = Integer.toString(value);
         String regex = "[0-8]";
@@ -115,6 +88,23 @@ public class Game {
 
         return numRodadas;
     }
+
+    public static Macaco macacoVencedor(Macaco[] macacos) {
+        Macaco highestCocosMacaco = null;
+        int highestCocosSum = Integer.MIN_VALUE;
+
+        for (Macaco macaco : macacos) {
+            int cocosSum = macaco.getNoCocosPares() + macaco.getNoCocosImpares();
+
+            if (cocosSum > highestCocosSum) {
+                highestCocosMacaco = macaco;
+                highestCocosSum = cocosSum;
+            }
+        }
+
+        return highestCocosMacaco;
+    }
+
 
 
 }

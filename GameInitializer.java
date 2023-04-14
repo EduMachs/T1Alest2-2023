@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.List;
+
 
 public class GameInitializer {
 
@@ -17,10 +17,32 @@ public class GameInitializer {
 
         File[] listaCasos = Game.pegarArquivos();
         String[] macacosArray = Game.readLinesFromFile(String.valueOf(listaCasos[casoDeTeste]));
-        Integer noRodadas = Game.readNumRodadas(String.valueOf(listaCasos[casoDeTeste]));
-        List<Macaco> macacos = Macaco.parseMacacoLines(macacosArray);
+        Macaco[] macacos = Macaco.parseMacacoLines(macacosArray);
+
+        Integer noRodadasPartida = Game.readNumRodadas(String.valueOf(listaCasos[casoDeTeste]));
         System.out.print("Número de rodadas: ");
-        System.out.println(noRodadas);
+        System.out.println(noRodadasPartida);
         Macaco.printMacacos(macacos);
+
+        int rodadaAtual = 0;
+        while ( 0 != ( noRodadasPartida - rodadaAtual)) {
+            rodadaAtual = rodadaAtual + 1;
+            for (int i = 0; i < macacos.length ; i++) {
+                var macacoAtual = macacos[i];
+
+                var macacoRecebePares = macacos[macacoAtual.getIndexMacacoParaPar()];
+                macacoRecebePares.setNoCocosPares(macacoAtual.getNoCocosPares() + macacoRecebePares.getNoCocosPares());
+                macacoAtual.setNoCocosPares(0);
+
+                var macacoRecebeImpares = macacos[macacoAtual.getIndexMacacoParaImpar()];
+                macacoRecebeImpares.setNoCocosImpares(macacoAtual.getNoCocosImpares() + macacoRecebeImpares.getNoCocosImpares());
+                macacoAtual.setNoCocosImpares(0);
+
+            }
+        }
+
+        Macaco.printMacacos(macacos);
+        System.out.println("MACACO VENCEDOR: Macaco " + Game.macacoVencedor(macacos).getIndex());
+
     }
 }
